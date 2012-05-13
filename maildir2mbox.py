@@ -5,7 +5,7 @@ import re
 import datetime
 import sys
 
-email_regex = re.compile('^[^<]*<(.+@.+)>')
+email_regex = re.compile(r'^[^<]*<(.+@.+)>')
 
 emails = os.listdir('.')
 total = len(emails)
@@ -26,7 +26,9 @@ for email in emails:
     finally:
         f.close()
     # join each split header line into one single line
-    content = re.sub('\n[\t ]+', ' ', content)
+    content = re.sub(r'\n[\t ]+', ' ', content)
+    # quote From_ line (gives a mboxrd output file)
+    content = re.sub(r'\n(\>*From )', r'\n>\1', content)
     lines = content.split('\n')
 
     email_addr, mbox_date = None, None
@@ -39,7 +41,7 @@ for email in emails:
         if line.startswith('Date: '):
             date = re.sub('^Date: ', '', line)
             # remove timezone name
-            date = re.sub(' \(.*\)$', '', date)
+            date = re.sub(r' \(.*\)$', '', date)
             try:
                 d = datetime.datetime.strptime(date, '%a, %d %b %Y %H:%M:%S %z')
             except ValueError:
