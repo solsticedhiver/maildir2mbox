@@ -17,12 +17,14 @@ for email in emails:
     print('{:2}% done\r'.format(int((count/total)*100)), file=sys.stderr, end='')
     count += 1
     # TODO: more sophisticated encoding handling needed here
+    # i.e. use chardet2 ? http://pypi.python.org/pypi/chardet2/2.0.1
     try:
         f = open(email, 'r')
         content = f.read()
     except UnicodeDecodeError:
-        f = open(email, mode='r', encoding='latin1')
-        content = f.read()
+        g = open(email, mode='r', encoding='latin1')
+        content = g.read()
+        g.close()
     finally:
         f.close()
     # join each split header line into one single line
@@ -54,5 +56,5 @@ for email in emails:
         if email_addr and mbox_date:
             print('From {}  {}'.format(email_addr, mbox_date))
             # email headers have been changed from original email (joined in one line)
-            print(content, end='')
+            print(content)
             break
