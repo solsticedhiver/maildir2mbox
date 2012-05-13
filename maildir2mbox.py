@@ -7,7 +7,15 @@ import sys
 
 email_regex = re.compile('^[^<]*<(.+@.+)>')
 
-for email in os.listdir('.'):
+emails = os.listdir('.')
+total = len(emails)
+print('Processing', total, 'emails', file=sys.stderr)
+
+count = 0
+for email in emails:
+    # print progress
+    print('{:2}% done\r'.format(int((count/total)*100)), file=sys.stderr, end='')
+    count += 1
     # TODO: more sophisticated encoding handling needed here
     try:
         f = open(email, 'r')
@@ -43,5 +51,6 @@ for email in os.listdir('.'):
             mbox_date = d.strftime('%a %b %e %H:%M:%S %Y')
         if email_addr and mbox_date:
             print('From {}  {}'.format(email_addr, mbox_date))
+            # email headers have been changed from original email (joined in one line)
             print(content, end='')
             break
