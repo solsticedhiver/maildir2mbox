@@ -17,3 +17,8 @@ The current script has certainly bugs. It can't handle all the encodings of impo
 It makes "heavy" use of memory too.
 
 Side-effect: it rewrites the headers of each message in one single line
+
+Another attempt: https://gist.github.com/2693582
+This one uses the mailbox python module. Why bother to reinvent the wheel where thereis a module for it ?
+But it outputs mboxo only format and is slow.
+However it converts all mboxes in a given directory and its submail folders directly to /tmp
